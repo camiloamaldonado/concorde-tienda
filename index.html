@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!-- Tienda generada con Harvys, asistente de e-commerce creado por el Profesor Harvey Sanabria -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balones y neumáticos Concorde — El balón de las estrellas</title>
+<meta name="description" content="Balones e implementos deportivos para diversos deportes.">
+<meta name="generator" content="Harvys — asistente de e-commerce del Profesor Harvey Sanabria">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="anim-baja tarj-borde modo-oscuro">
+
+<!-- MODAL PAGO -->
+<div class="modal-overlay" id="modal-pago" onclick="modalClickFuera(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head"><h3>Confirmar pago</h3><button class="modal-cerrar" onclick="cerrarModal()" aria-label="Cerrar">✕</button></div>
+    <div class="modal-body">
+      <div class="modal-total"><span class="tl">Total a pagar</span><span class="tm" id="modal-total-monto">$0</span></div>
+      <div class="pago-metodos" id="pago-metodos"></div>
+      <div class="pago-datos" id="pago-datos">
+        <div class="pd-label">Transferir a este número</div>
+        <div class="pd-numero" id="pd-numero"></div>
+        <div class="pd-nombre" id="pd-nombre"></div>
+        <button class="btn-copiar" onclick="copiarNumero()">📋 Copiar número</button>
+      </div>
+      <div class="pasos">
+        <div class="paso"><div class="paso-num">1</div><div class="paso-txt" id="paso-1"></div></div>
+        <div class="paso"><div class="paso-num">2</div><div class="paso-txt">Toca <strong>"Confirmar y enviar"</strong> — se abre WhatsApp con tu pedido</div></div>
+        <div class="paso"><div class="paso-num">3</div><div class="paso-txt" id="paso-3"></div></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a href="#" target="_blank" rel="noopener" class="btn-wsp" onclick="return prepararWsp(this)">✅ Confirmar y enviar por WhatsApp</a>
+      <button class="btn-seguir" onclick="cerrarModal()">← Seguir comprando</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="cerrarCarrito()"></div>
+
+<!-- VISOR DE FOTOS -->
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Foto del producto">
+  <figure class="visor-caja">
+    <button class="visor-cerrar" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto"><img id="visor-img" alt=""></div>
+    <figcaption><strong id="visor-nombre"></strong><span id="visor-precio"></span></figcaption>
+    <div class="visor-ayuda">Toca o haz clic en la foto para ampliarla más</div>
+  </figure>
+</div>
+
+<button class="carrito-fab" onclick="toggleCarrito()" id="fab" aria-label="Abrir carrito">🛒<span class="carrito-badge" id="badge">0</span></button>
+
+<div class="carrito-panel" id="panel-carrito">
+  <div class="panel-header"><h3>Tus balones elegidos</h3><button class="btn-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button></div>
+  <ul id="lista-carrito"></ul>
+  <div class="panel-footer">
+    <div class="total-row"><span class="total-lbl">Total</span><span class="total-monto" id="total">$0</span></div>
+    <div class="panel-btns"><button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button><button class="btn-pagar" onclick="pagar()">Consultar pedido por WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ASISTENTE DE LA TIENDA (responde con los datos de esta tienda) -->
+<span class="as-aviso" id="as-aviso">¿Te ayudo? 👋</span>
+<button class="as-burbuja" id="as-burbuja" aria-label="Abrir el asistente de la tienda"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></button>
+<div class="as-panel" id="as-panel" role="dialog" aria-label="Pachito">
+  <div class="as-cabecera">
+    <div class="as-avatar"><svg class="as-robot" viewBox="0 0 64 64" aria-hidden="true">
+      <line x1="32" y1="5" x2="32" y2="14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle class="as-antena" cx="32" cy="5" r="4" fill="currentColor"/>
+      <rect x="4" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="54" y="27" width="6" height="12" rx="3" fill="currentColor"/>
+      <rect x="10" y="14" width="44" height="38" rx="15" fill="currentColor"/>
+      <rect x="16" y="21" width="32" height="20" rx="10" fill="var(--as-cara)"/>
+      <circle class="as-ojo" cx="25" cy="31" r="4" fill="currentColor"/>
+      <circle class="as-ojo" cx="39" cy="31" r="4" fill="currentColor"/>
+      <path d="M26 45q6 4 12 0" stroke="var(--as-cara)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg></div>
+    <div><strong>Pachito</strong><small><i></i> En línea</small></div>
+    <button id="as-cerrar" aria-label="Cerrar el asistente">✕</button>
+  </div>
+  <div class="as-mensajes" id="as-mensajes"></div>
+  <div class="as-chips" id="as-chips"></div>
+  <form class="as-form" id="as-form">
+    <input id="as-input" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+  </form>
+</div>
+
+<header class="hero hero-compacto">
+  <div class="hero-bg efecto-ninguno"></div>
+  <div class="hero-content">
+    <div>
+      
+      <div class="hero-badge">Balones Concorde · Bogotá</div>
+      <h1>CONCORDE<span>El balón de las estrellas</span></h1>
+      <p class="hero-sub">Balones para fútbol, futsala, microfútbol, voleibol y baloncesto. Encuentra el tuyo con atención personalizada.</p>
+      <a href="#catalogo" class="btn-hero">Explorar balones
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <div class="hero-stats"><div class="hero-stat"><div class="num">7</div><div class="lbl">Referencias deportivas</div></div><div class="hero-stat"><div class="num">Bogotá</div><div class="lbl">Domicilios locales</div></div><div class="hero-stat"><div class="num">Colombia</div><div class="lbl">Envíos nacionales</div></div></div>
+    </div>
+    </div>
+  <div class="hero-scroll"><div></div></div>
+</header>
+
+<section class="banner-sec">
+  <div class="banner-glow"></div>
+  <div class="banner-content">
+    <div class="sec-label">Tu deporte, tu balón</div>
+    <h2>La próxima jugada <em>empieza contigo</em></h2>
+    <p>Elige tu balón Concorde y consulta los detalles por WhatsApp. Tenemos domicilios en Bogotá, envíos nacionales y recogida personal. Entrega aproximada de 7 días hábiles después del pago del anticipo; consulta su valor antes de pedir.</p>
+    <div class="banner-chips"><span class="chip">Atención personalizada</span><span class="chip">Envíos nacionales</span><span class="chip">Recogida personal</span><span class="chip">Contraentrega desde $45.000 · comisión 5%</span></div>
+  </div>
+</section>
+
+<div class="filtros-wrap" id="filtros-bar">
+  <div class="busqueda-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/></svg>
+    <input type="text" id="buscador" placeholder="Buscar producto..." oninput="filtrarBusqueda()">
+  </div>
+</div>
+<section class="catalogo-wrap" id="catalogo">
+  <div class="catalogo-header">
+    <div><div class="sec-label">Encuentra tu disciplina</div><div class="sec-title">Balones Concorde</div></div>
+    <div class="catalogo-count" id="cont-count"></div>
+  </div>
+  <div id="productos"></div>
+</section>
+
+<section class="beneficios-sec" id="beneficios">
+  <div class="sec-centro"><div class="sec-label">Juega con confianza</div><div class="sec-title">El respaldo Concorde</div></div>
+  <div class="beneficios-grid">
+    <div class="bcard"><div class="bcard-icono">🏅</div><h3>Calidad y originalidad</h3><p>Productos originales y de buena calidad para disfrutar tu deporte.</p></div><div class="bcard"><div class="bcard-icono">🤝</div><h3>Atención personalizada</h3><p>Consulta con el negocio qué balón se adapta a tu disciplina.</p></div><div class="bcard"><div class="bcard-icono">💙</div><h3>Buenos precios</h3><p>Conoce los precios de cada referencia y elige según tu presupuesto.</p></div><div class="bcard"><div class="bcard-icono">🛡️</div><h3>Respaldo y garantía</h3><p>El negocio ofrece garantía. Consulta condiciones y plazos por WhatsApp antes de comprar.</p></div>
+  </div>
+</section>
+
+<section class="recs-sec">
+  <div class="sec-label">Explora otras disciplinas</div>
+  <div class="sec-title">Balones para tu próxima jugada</div>
+  <div class="recs-grid" id="recomendados"></div>
+</section>
+
+<section class="top-sec">
+  <div class="sec-label">Los más votados por la comunidad</div>
+  <div class="sec-title">Favoritos de la cancha</div>
+  <div class="top-grid" id="top"></div>
+</section>
+
+<section class="duelo-sec">
+  <div class="sec-label">Tú eliges la próxima estrella</div>
+  <div class="sec-title">¿Con cuál balón juegas?</div>
+  <div class="duelo-arena" id="duelo"></div>
+  <p class="duelo-info">Elige tu favorito para subirlo en la clasificación de la comunidad.</p>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-marca"><h3>Balones y neumáticos Concorde</h3><p>Balones e implementos deportivos desde Bogotá para Colombia. El balón de las estrellas.</p></div>
+    <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/573125155181" target="_blank" rel="noopener">WhatsApp: +57 3125155181</a></li><li><a href="https://instagram.com/balonesconcorde" target="_blank" rel="noopener">Instagram: @balonesconcorde</a></li><li>📍 Bogotá D.C.</li></ul></div>
+    <div class="footer-col"><h4>Pagos</h4><ul><li>Efectivo</li><li>Nequi</li><li>Transferencia bancaria</li><li>Llave</li><li>Tarjeta (coordinar con el negocio)</li><li>Contraentrega</li></ul></div>
+    <div class="footer-col"><h4>Categorías</h4><ul><li>Fútbol #5</li><li>Fútbol #4</li><li>Futsala #62-64</li><li>Microfútbol #3.8</li><li>Microfútbol #3.5</li><li>Voleibol</li><li>Baloncesto #7</li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Balones y neumáticos Concorde — Todos los derechos reservados</span>
+    <span>Concorde · Tu pasión por el deporte nos une</span>
+  </div>
+  <div class="footer-credito">
+    Creada con <strong>Harvys</strong> · Prof. Harvey Sanabria ·
+    <a href="https://wa.me/573103323843?text=Hola%20Profesor%20Harvey%2C%20vi%20una%20tienda%20creada%20con%20Harvys%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">WhatsApp 310 332 3843</a>
+  </div>
+</footer>
+
+<!-- Copia del proyecto para volver a abrirlo en Harvys (botón "Abrir"). No la borres. -->
+<script type="application/json" id="harvys-proyecto">{"negocio":{"nombre":"Balones y neumáticos Concorde","descripcion":"Balones e implementos deportivos para diversos deportes.","eslogan":"El balón de las estrellas","ciudad":"Bogotá D.C.","cobertura":"Domicilios en Bogotá y envíos a nivel nacional, principalmente Bogotá y Medellín. Recogida personal disponible; dirección [POR COMPLETAR]. Entrega aproximada: 7 días hábiles después del pago del anticipo; valor del anticipo [POR COMPLETAR].","whatsapp":"573125155181","instagram":"balonesconcorde","facebook":"","tiktok":"","horarios":[],"logo":""},"tema":{"nombreEstilo":"Concorde Edición Estrella","modo":"oscuro","colores":{"primario":"#1BB0CE","textoSobrePrimario":"#101522","fondo":"#080C14","fondoAlterno":"#101D35","tarjeta":"#12213B","texto":"#F6F7FB","textoSuave":"#B5C2D7","acento":"#69A7FF"},"fuentes":{"titulos":"Space Grotesk","cuerpo":"DM Sans"},"titulosMayusculas":false,"radio":6,"animaciones":"baja","fondoEfecto":"ninguno","hero":"compacto","tarjetas":"borde"},"textos":{"heroEtiqueta":"Balones Concorde · Bogotá","heroTitulo":"CONCORDE","heroTituloResaltado":"El balón de las estrellas","heroSubtitulo":"Balones para fútbol, futsala, microfútbol, voleibol y baloncesto. Encuentra el tuyo con atención personalizada.","heroBoton":"Explorar balones","heroImagen":"","estadisticas":[{"valor":"{productos}","etiqueta":"Referencias deportivas"},{"valor":"Bogotá","etiqueta":"Domicilios locales"},{"valor":"Colombia","etiqueta":"Envíos nacionales"}],"bannerEtiqueta":"Tu deporte, tu balón","bannerTitulo":"La próxima jugada","bannerTituloResaltado":"empieza contigo","bannerTexto":"Elige tu balón Concorde y consulta los detalles por WhatsApp. Tenemos domicilios en Bogotá, envíos nacionales y recogida personal. Entrega aproximada de 7 días hábiles después del pago del anticipo; consulta su valor antes de pedir.","chips":["Atención personalizada","Envíos nacionales","Recogida personal","Contraentrega desde $45.000 · comisión 5%"],"catalogoEtiqueta":"Encuentra tu disciplina","catalogoTitulo":"Balones Concorde","botonAgregar":"+ Agregar al carrito","beneficiosEtiqueta":"Juega con confianza","beneficiosTitulo":"El respaldo Concorde","recomendadosEtiqueta":"Explora otras disciplinas","recomendadosTitulo":"Balones para tu próxima jugada","topEtiqueta":"Los más votados por la comunidad","topTitulo":"Favoritos de la cancha","dueloEtiqueta":"Tú eliges la próxima estrella","dueloTitulo":"¿Con cuál balón juegas?","dueloInfo":"Elige tu favorito para subirlo en la clasificación de la comunidad.","testimoniosEtiqueta":"La voz de nuestros clientes","testimoniosTitulo":"Experiencias Concorde","horariosEtiqueta":"Planea tu visita","horariosTitulo":"Horarios de atención","footerTexto":"Balones e implementos deportivos desde Bogotá para Colombia. El balón de las estrellas.","footerFrase":"Concorde · Tu pasión por el deporte nos une","carritoTitulo":"Tus balones elegidos","botonPagar":"Consultar pedido por WhatsApp"},"productos":[{"id":"strike","nombre":"Strike","precio":45000,"categoria":"Fútbol #5","imagen":"foto:0so4nb","opciones":null,"destacado":false},{"id":"ciclon","nombre":"Ciclón","precio":44000,"categoria":"Fútbol #4","imagen":"foto:76j48a","opciones":null,"destacado":false},{"id":"olympus","nombre":"Olympus","precio":45000,"categoria":"Futsala #62-64","imagen":"foto:a7l2a1","opciones":null,"destacado":false},{"id":"halley","nombre":"Halley","precio":44000,"categoria":"Microfútbol #3.8","imagen":"foto:vgxmqe","opciones":null,"destacado":false},{"id":"street","nombre":"Street","precio":40000,"categoria":"Microfútbol #3.5","imagen":"foto:yjb7ke","opciones":null,"destacado":false},{"id":"sucta","nombre":"Sucta","precio":50000,"categoria":"Voleibol","imagen":"foto:7ngcpo","opciones":null,"destacado":false},{"id":"welstar","nombre":"Welstar","precio":50000,"categoria":"Baloncesto #7","imagen":"foto:v6tj8e","opciones":null,"destacado":false}],"beneficios":[{"icono":"🏅","titulo":"Calidad y originalidad","texto":"Productos originales y de buena calidad para disfrutar tu deporte."},{"icono":"🤝","titulo":"Atención personalizada","texto":"Consulta con el negocio qué balón se adapta a tu disciplina."},{"icono":"💙","titulo":"Buenos precios","texto":"Conoce los precios de cada referencia y elige según tu presupuesto."},{"icono":"🛡️","titulo":"Respaldo y garantía","texto":"El negocio ofrece garantía. Consulta condiciones y plazos por WhatsApp antes de comprar."}],"testimonios":[],"pagos":{"metodos":[{"nombre":"Efectivo","icono":"💵","tipo":"efectivo"},{"nombre":"Nequi","icono":"💜","tipo":"transferencia"},{"nombre":"Transferencia bancaria","icono":"🏦","tipo":"transferencia"},{"nombre":"Llave","icono":"🔑","tipo":"transferencia"},{"nombre":"Tarjeta (coordinar con el negocio)","icono":"💳","tipo":"tarjeta"},{"nombre":"Contraentrega","icono":"📦","tipo":"contraentrega"}],"numeroTransferencia":"[POR COMPLETAR]","titular":"[POR COMPLETAR]","contraentregaDetalle":"Disponible a nivel nacional para pedidos desde $45.000. Pago en efectivo al repartidor, con comisión adicional del 5% de la empresa de reparto. Confirmar con el negocio cómo aplica el anticipo a esta modalidad."},"backend":{"url":"https://script.google.com/macros/s/AKfycbyC-VbHXUY11OPLFD38ozT7KWyQy2l7pRGerry-oQ2YXIqTw2NcPNza7fG5XhW9taYYkA/exec"},"asistente":{"activo":true,"nombre":"Pachito","saludo":"¡Hola! Soy Pachito, tu guía de Balones Concorde. Te ayudo a consultar referencias, precios y entregas. ¿Para qué deporte buscas balón?"},"secciones":["banner","catalogo","beneficios","recomendados","top","duelo"],"personalizado":{"css":"","secciones":[]}}</script>
+<script type="application/json" id="harvys-rutas">{"strike":"img/strike-futbol-5-0so4nb.jpg","ciclon":"img/ciclon-futbol-4-76j48a.jpg","olympus":"img/olympus-futsala-62-64-a7l2a1.jpg","halley":"img/halley-micro-3-8-vgxmqe.jpg","street":"img/street-micro-3-5-yjb7ke.jpg","sucta":"img/sucta-voleibol-7ngcpo.jpg","welstar":"img/welstar-basquetbol-v6tj8e.jpg"}</script>
+<script src="script.js"></script>
+</body>
+</html>
